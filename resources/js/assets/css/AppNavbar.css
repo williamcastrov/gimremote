@@ -1,0 +1,73 @@
+.barra{
+    background: #0277bd;
+    font-size: 24px;
+    color: white;
+  }
+  
+  .ulIzquierda {
+    float: left;
+    list-style: none;
+    display: flex;
+  }
+  
+  .iconoMenu {
+    font-size: 20px;
+    color: white;
+  }
+  
+  .tituloMenu {
+    font-size: 40px;
+    color: white;
+    font-family: sans-serif;
+    /*
+    font-weight: bold;
+    */
+  }
+  
+  .ulDerecha {
+    float: right;
+    list-style: none;
+    display: flex;
+    padding-right: 30px;
+  }
+  
+  .imagenNavbar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .ant-layout-header {
+    padding: 0px;
+  }
+  
+  .logo {
+    height: 32px;
+    margin: 16px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .site-layout .site-layout-background {
+    background: #fff;
+  }
+
+  .site-layout-content {
+    min-height: 450px;
+    padding: 24px;
+    background: #fff;
+  }
+  
+  .logo1 {
+    float: left;
+    /*
+    width: 120px;
+    */
+    height: 31px;
+    margin: 16px 24px 16px 0;
+    background: #0277bd;
+  }
+  
+  .ant-row-rtl #components-layout-demo-top .logo {
+    float: right;
+    margin: 16px 0 16px 24px;
+  }

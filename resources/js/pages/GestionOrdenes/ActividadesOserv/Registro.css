@@ -1,0 +1,33 @@
+  .button{
+    background-color:  #f6e9d3;
+  }
+
+  .button1{
+    background-color: #3f6600;
+  }
+  
+  .button2{
+    background-color: #f55733;
+  }
+
+  .button3{
+    background-color: #759eff;
+  }
+
+  .button4{
+    background-color: #c5c6c8;
+  }
+
+  .button5{
+    background-color:#b2e2f2;
+    width: 400px;
+  }
+
+  .button6{
+    background-color:#3b8cde;
+    width: 400px;
+  }
+  
+  .ant-btn-primary{
+    font-size: 12px;
+  }
