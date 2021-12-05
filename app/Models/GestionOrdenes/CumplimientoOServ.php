@@ -38,6 +38,7 @@ class CumplimientoOServ extends Model
 		'finaltransporte_cosv',
 		'tiempotransporte_cosv',
 		'horometro_cosv',
+		'combogrupo_cosv',
 		'idcomponente',
 		'seriecomponente',
 		'voltajecomponente',

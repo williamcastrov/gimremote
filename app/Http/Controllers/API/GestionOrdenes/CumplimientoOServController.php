@@ -39,6 +39,7 @@ class CumplimientoOServController extends Controller
           $insert['finaltransporte_cosv']       = $request['finaltransporte_cosv'];
           $insert['tiempotransporte_cosv']      = $request['tiempotransporte_cosv'];
           $insert['horometro_cosv']             = $request['horometro_cosv'];
+          $insert['combogrupo_cosv']            = $request['combogrupo_cosv'];
           $insert['idcomponente']               = $request['idcomponente'];
           $insert['seriecomponente']            = $request['seriecomponente'];
           $insert['voltajecomponente']          = $request['voltajecomponente'];
@@ -403,6 +404,7 @@ class CumplimientoOServController extends Controller
           $data['finaltransporte_cosv']       = $request['finaltransporte_cosv'];
           $data['tiempotransporte_cosv']      = $request['tiempotransporte_cosv'];
           $data['horometro_cosv']             = $request['horometro_cosv'];
+          $data['combogrupo_cosv']             = $request['combogrupo_cosv'];
           $data['idcomponente']               = $request['idcomponente'];
           $data['seriecomponente']            = $request['seriecomponente'];
           $data['voltajecomponente']          = $request['voltajecomponente'];

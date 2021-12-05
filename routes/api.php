@@ -406,6 +406,7 @@ Route::get('/equipos/listar_equiposaccesorioscargadores', 'App\Http\Controllers\
 Route::get('/equipos/listar_equiposaccesoriosbaterias', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_equiposaccesoriosbaterias');
 Route::post('/equipos/create', 'App\Http\Controllers\API\Mantenimiento\EquiposController@create');
 Route::get('/equipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@get');
+Route::get('/equipos/leecombos/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@leecombos');
 Route::delete('/equipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@delete');
 Route::put('/equipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@update');
 

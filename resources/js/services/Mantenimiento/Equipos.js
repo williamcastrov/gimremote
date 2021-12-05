@@ -138,6 +138,15 @@ equipos.listUnEquipo = async (id_equ) => {
     return res;
 }
 
+equipos.leecombos = async (id_equ) => {
+    const urlList = baseUrl+"/leecombos/"+id_equ
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
 equipos.update = async (data) => {
     //console.log(data);
     const urlUpdate = baseUrl+"/update/"+data.id_equ

@@ -466,6 +466,31 @@ class EquiposController extends Controller
           }
           return $response;
       }
+
+      public function leecombos($codigocombo){
+        try { 
+          //$data = Frecuencias::find($id_fre);
+          // t11.cliente_ctr   and t0.id_equ = t11.id_ctr and estado_ctr = 31  INNER JOIN contratos     as t11
+          $data = DB::select("SELECT t0.*
+          FROM equipos as t0 
+          WHERE t0.combogrupo_equ = $codigocombo");
+
+          if ($data) {
+              $response['data'] = $data;
+              $response['message'] = "Load successful";
+              $response['success'] = true;
+          }
+          else {
+              $response['data'] = null;
+              $response['message'] = "Not found data combogrupo_equ => $codigocombo";
+              $response['success'] = false;
+          }
+          } catch (\Exception $e) {
+              $response['message'] = $e->getMessage();
+              $response['success'] = false;
+          }
+          return $response;
+      }
     
       public function update(Request $request, $id_equ){
         try {

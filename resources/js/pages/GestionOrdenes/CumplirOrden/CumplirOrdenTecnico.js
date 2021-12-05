@@ -9,6 +9,7 @@ import Moment from 'moment';
 // Componentes de Conexion con el Backend
 import crearordenesServices from "../../../services/GestionOrdenes/CrearOrdenes";
 import cumplimientooservServices from "../../../services/GestionOrdenes/CumplimientoOserv";
+import equiposServices from "../../../services/Mantenimiento/Equipos";
 
 const { Item } = Form;
 
@@ -207,7 +208,7 @@ function CumplirOrdenTecnico(props) {
     }, [grabar])
 
     const seleccionarOrden = (orden, caso) => {
-        //console.log("DATOS ORDEN : ", orden.id_otr)
+        //console.log("DATOS ORDEN : ", orden)
         if (orden.estado_otr === 24 || orden.estado_otr === 27 || orden.estado_otr === 32) {
             swal("Cumplimiento OT", "El estado de la OT no permite cambios", "warning", { button: "Aceptar" });
         } else {
@@ -217,22 +218,24 @@ function CumplirOrdenTecnico(props) {
             async function fetchDataCumplimientoActivo() {
                 const res = await cumplimientooservServices.listActividadActiva(orden.id_actividad);
                 setListActividadActiva(res.data[0]);
-                console.log("DATOS ACTIVIDAD : ", res.data[0])
+                //console.log("DATOS ACTIVIDAD : ", res.data[0])
             }
             fetchDataCumplimientoActivo();
+            
             async function fetchDataTotalActivos() {
                 const rest = await cumplimientooservServices.actividadesactivasxot(orden.id_otr);
                 setTotalActivas(rest.data[0].actividadesxotactivas);
                 //console.log("TOTAL ACTIVAS : ", rest.data[0].actividadesxotactivas)
             }
             fetchDataTotalActivos();
+            
             //console.log("CLIENTE SELECCIONADO : ", listarClientes);
             (caso === "Editar") ? abrirModalEditar() : abrirCerrarModalPendiente()
         }
     }
 
     const seleccionaotCrearActividad = (orden, caso) => {
-        console.log("DATOS ORDEN : ", orden)
+        //console.log("DATOS ORDEN : ", orden)
         agregarActividad(orden);
     }
 

@@ -39,6 +39,7 @@ import tiposmttoServices from "../../../services/Mantenimiento/Tiposmtto";
 import datoshorometroServices from "../../../services/Mantenimiento/DatosHorometro";
 import estadosServices from "../../../services/Parameters/Estados";
 import pendienteotServices from "../../../services/GestionOrdenes/PendienteOT";
+import equiposServices from "../../../services/Mantenimiento/Equipos";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -117,7 +118,7 @@ function RegistroActividadesOperario(props) {
     cantidad_cosv, valorunitario_cosv
   } = props.listActividadActiva;
 
-  console.log("DATOS ACTIVIDAD LLEGA : ", props.listActividadActiva.id_actividad)
+  console.log("LEE COMBOS : ", props.leeCombos)
 
   const styles = useStyles();
 
@@ -132,7 +133,7 @@ function RegistroActividadesOperario(props) {
   const [listUnaOrden, setListUnaOrden] = useState([]);
   const [listUnCumplimiento, setListUnCumplimiento] = useState([]);
   const [listActividadActiva, setListActividadActiva] = useState([]);
-
+  const [leeCombos, setLeeCombos] = useState([]);
   const [modalEditar, setModalEditar] = useState(false);
   const [modalRevisarCumplimiento, setModalRevisarCumplimiento] = useState(false);
   const [modalActualizarCumplimiento, setModalActualizarCumplimiento] = useState(false);
@@ -171,6 +172,7 @@ function RegistroActividadesOperario(props) {
   const [fechainicial, setFechainicial] = useState(fechaactual);
   const [fechafinal, setFechafinal] = useState(fechaactual);
   const [tipoActividad, setTipoActividad] = useState(0);
+  const [codigoCombo, setCodigoCombo] = useState(0);
   const [tiempoActividad, setTiempoActividad] = useState(0);
   const [horainicial, setHorainicial] = useState(horaactual);
   const [horafinal, setHorafinal] = useState(horaactual);
@@ -313,6 +315,19 @@ function RegistroActividadesOperario(props) {
     fetchDataEstados();
   }, [])
 
+  useEffect(() => {
+    async function fetchDataCombos() {
+      let codigo = '"' + codigo_equ + '"'
+      //console.log("CODIGO : " , codigo);
+
+      const result = await equiposServices.leecombos(codigo);
+      setLeeCombos(result.data);
+      //console.log("COMBOS  : ",orden.codigo_equ, " : ",  result.data)
+    }
+    fetchDataCombos();
+  }, [])
+
+ 
   useEffect(() => {
     /*
     async function fetchDataOrdenes() {
@@ -780,6 +795,9 @@ function RegistroActividadesOperario(props) {
         iniciatransporte_cosv: iniciatransporte_cosv,
         finaltransporte_cosv: finaltransporte_cosv,
         tiempotransporte_cosv: tiempoTransporte,
+        estado_cosv: "",
+        horometro_cosv: 0,
+        combogrupo_cosv: codigoCombo,
         idcomponente: "0",
         seriecomponente: "0",
         voltajecomponente: "0",
@@ -943,6 +961,11 @@ function RegistroActividadesOperario(props) {
   function seleccionarTipoActividad(value) {
     console.log("TIPO DE ACTIVIDAD", value);
     setTipoActividad(value);
+  }
+
+  function seleccionarCodigoCombo(value) {
+    console.log("CODIGO COMBO", value);
+    setCodigoCombo(value);
   }
 
   useEffect(() => {
@@ -1281,6 +1304,26 @@ function RegistroActividadesOperario(props) {
                   listarTiposMtto && listarTiposMtto.map((itemselect) => {
                     return (
                       <Option value={itemselect.id_tmt}>{itemselect.descripcion_tmt}</Option>
+                    )
+                  })
+                }
+              </Select>
+            </Item>
+          </Col>
+          <Col span={4}>
+            <Item
+              label="Combo: "
+            >
+              <Select
+                style={{ width: 220 }}
+                name="combogrupo_cosv"
+                placeholder="Seleccione el compooente del Mtto"
+                onChange={seleccionarCodigoCombo}
+              >
+                {
+                  leeCombos && leeCombos.map((itemselect) => {
+                    return (
+                      <Option value={itemselect.id_equ}>{itemselect.codigo_equ}</Option>
                     )
                   })
                 }
@@ -1728,7 +1771,7 @@ function RegistroActividadesOperario(props) {
         <Col span={16}>
           <Item
             label="Ingresar Valor del Horometro"
-          > 
+          >
             <Input
               name="id"
               type="number"
@@ -1790,7 +1833,7 @@ function RegistroActividadesOperario(props) {
 
       <Container className={styles.floatingbutton} >
         <Bottom
-          tooltip="5 - Myy Bueno"
+          tooltip="5 - Muy Bueno"
           rotate={true}
           styles={{ backgroundColor: darkColors.green, color: lightColors.white }}
           onClick={() => grabarCalificacionServicio(5)} ><SentimentVerySatisfiedIcon />
