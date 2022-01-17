@@ -138,53 +138,53 @@ function CumplirOrdenTecnico(props) {
             const rest = await cumplimientooservServices.actividadestotalesxot(actividad.id_otr);
             activas = rest.data[0].actividadesxotactivas;
             console.log("TOTAL ACTIVAS : ", rest.data[0].actividadestotalesxot)
-        
-            console.log("ACTIVIDAD : ", actividad);
- 
-        {
-            activas = rest.data[0].actividadestotalesxot + 1;
-            let idactividad = "" + actividad.id_otr + activas;
-            setCumplimientoSeleccionado([{
-                id: activas,
-                id_cosv: actividad.id_otr,
-                id_actividad: idactividad,
-                descripcion_cosv: "",
-                tipooperacion_cosv: 8,
-                tipofallamtto_cosv: 48,
-                referencia_cosv: 0,
-                cantidad_cosv: 0,
-                valorunitario_cosv: 0,
-                valortotal_cosv: 0,
-                servicio_cosv: actividad.servicio_cosv,
-                observacion_cosv: "",
-                tiempoactividad_cosv: 0,
-                tipo_cosv: 1,
-                fechaprogramada_cosv: fechaactual,
-                fechainicia_cosv: fechainicial,
-                fechafinal_cosv: fechaactual,
-                operario_cosv: operario,
-                operariodos_cosv: operarioDos,
-                resumenactividad_cosv: "",
-                iniciatransporte_cosv: fechainicial,
-                finaltransporte_cosv: fechainicial,
-                tiempotransporte_cosv: 0,
-                horometro_cosv: 0,
-                estado_cosv: 23,
-                idcomponente: 0,
-                seriecomponente: 0,
-                voltajecomponente: 0,
-                voltajesalidasulfatacion: 0,
-                amperajecomponente: 0,
-                celdasreferenciacomponente: 0,
-                cofreseriecomponentes: 0,
-                estadocomponentes: 0,
-                estadooperacionequipo_cosv: 81,
-            }])
-        }
 
-        setGrabar(true)
-    }
-    fetchDataTotalActivos();
+            console.log("ACTIVIDAD : ", actividad);
+
+            {
+                activas = rest.data[0].actividadestotalesxot + 1;
+                let idactividad = "" + actividad.id_otr + activas;
+                setCumplimientoSeleccionado([{
+                    id: activas,
+                    id_cosv: actividad.id_otr,
+                    id_actividad: idactividad,
+                    descripcion_cosv: "",
+                    tipooperacion_cosv: 8,
+                    tipofallamtto_cosv: 48,
+                    referencia_cosv: 0,
+                    cantidad_cosv: 0,
+                    valorunitario_cosv: 0,
+                    valortotal_cosv: 0,
+                    servicio_cosv: actividad.servicio_cosv,
+                    observacion_cosv: "",
+                    tiempoactividad_cosv: 0,
+                    tipo_cosv: 1,
+                    fechaprogramada_cosv: fechaactual,
+                    fechainicia_cosv: fechainicial,
+                    fechafinal_cosv: fechaactual,
+                    operario_cosv: operario,
+                    operariodos_cosv: operarioDos,
+                    resumenactividad_cosv: "",
+                    iniciatransporte_cosv: fechainicial,
+                    finaltransporte_cosv: fechainicial,
+                    tiempotransporte_cosv: 0,
+                    horometro_cosv: 0,
+                    estado_cosv: 23,
+                    idcomponente: 0,
+                    seriecomponente: 0,
+                    voltajecomponente: 0,
+                    voltajesalidasulfatacion: 0,
+                    amperajecomponente: 0,
+                    celdasreferenciacomponente: 0,
+                    cofreseriecomponentes: 0,
+                    estadocomponentes: 0,
+                    estadooperacionequipo_cosv: 81,
+                }])
+            }
+
+            setGrabar(true)
+        }
+        fetchDataTotalActivos();
     };
 
     useEffect(() => {
@@ -221,14 +221,14 @@ function CumplirOrdenTecnico(props) {
                 //console.log("DATOS ACTIVIDAD : ", res.data[0])
             }
             fetchDataCumplimientoActivo();
-            
+
             async function fetchDataTotalActivos() {
                 const rest = await cumplimientooservServices.actividadesactivasxot(orden.id_otr);
                 setTotalActivas(rest.data[0].actividadesxotactivas);
                 //console.log("TOTAL ACTIVAS : ", rest.data[0].actividadesxotactivas)
             }
             fetchDataTotalActivos();
-            
+
             //console.log("CLIENTE SELECCIONADO : ", listarClientes);
             (caso === "Editar") ? abrirModalEditar() : abrirCerrarModalPendiente()
         }
@@ -236,7 +236,22 @@ function CumplirOrdenTecnico(props) {
 
     const seleccionaotCrearActividad = (orden, caso) => {
         //console.log("DATOS ORDEN : ", orden)
-        agregarActividad(orden);
+        let creaActividad = "N";
+
+        swal({
+            title: "CREAR ACTIVIDAD OT",
+            text: "Por favor confirme si desea crear la Actividad!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    agregarActividad(orden);
+                } else {
+                    return;
+                }
+            });
     }
 
     const abrirModalEditar = () => {
