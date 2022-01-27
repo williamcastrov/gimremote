@@ -176,6 +176,33 @@ class CumplimientoOServController extends Controller
           return $response;
       }
 
+      public function leeractividad($actividad){
+        try { 
+          $data = DB::select("SELECT t0.*, t1.descripcion_tope, t2.descripcion_are,  t3.descripcion_fmt, t4.descripcion_tfa,
+                                           t5.nombre_est
+          FROM cumplimientooserv as t0 INNER JOIN tipooperacion as t1 INNER JOIN actividadrealizada as t2
+                                       INNER JOIN fallasdemtto  as t3 INNER JOIN tiposdefallas      as t4
+                                       INNER JOIN estados       as t5
+          WHERE t0.id_actividad = $actividad  and t0.tipooperacion_cosv = t1.id_tope and t0.servicio_cosv = t2.id_are  and 
+                t0.tipofallamtto_cosv = t3.id_fmt and t3.tipodefalla_fmt    = t4.id_tfa and  t0.estadooperacionequipo_cosv = t5.id_est");
+      
+          if ($data) {
+              $response['data'] = $data;
+              $response['message'] = "Load successful";
+              $response['success'] = true;
+          }
+          else {
+              $response['data'] = null;
+              $response['message'] = "Not found data id_cosv => $id_cosv";
+              $response['success'] = false;
+          }
+          } catch (\Exception $e) {
+              $response['message'] = $e->getMessage();
+              $response['success'] = false;
+          }
+          return $response;
+      }
+
       public function listaractividadactiva($id_actividad){
         try { 
           $data = DB::select("SELECT t0.*, t1.descripcion_tope, t2.descripcion_are,  t3.descripcion_fmt, t4.descripcion_tfa,

@@ -30,6 +30,17 @@ cumplimientooserv.listUnCumplimiento = async (id_cosv) => {
     return res;
 }
 
+cumplimientooserv.leeractividad = async (actividad) => {
+    console.log("ID ACTIVIDAD SERVICES : ", actividad)
+    const urlList = baseUrl + "/leeractividad/" +actividad
+    const res = await axios.get(urlList)
+        .then(response => { return response.data; })
+        .catch(error => { return error; })
+
+    return res;
+}
+
+
 cumplimientooserv.leeactividadestotalactivas = async () => {
     const urlList = baseUrl + "/leeactividadestotalactivas"
     const res = await axios.get(urlList)

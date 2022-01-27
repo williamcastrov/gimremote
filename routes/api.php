@@ -165,6 +165,7 @@ Route::put('/ordenesserv/updateestadoasignado/{id}', 'App\Http\Controllers\API\G
 Route::get('/cumplimiento/listar_cumplimiento', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@listar_cumplimiento');
 Route::post('/cumplimiento/create', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@create');
 Route::get('/cumplimiento/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@get');
+Route::get('/cumplimiento/leeractividad/{id}', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@leeractividad');
 Route::get('/cumplimiento/listaractividadactiva/{id}', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@listaractividadactiva');
 Route::get('/cumplimiento/getoser/{id}', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@getoser');
 Route::delete('/cumplimiento/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@delete');
