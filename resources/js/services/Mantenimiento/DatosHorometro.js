@@ -30,7 +30,7 @@ datoshorometro.listUnDatoHorometro = async (codigoequipo_dhr) => {
 }
 
 datoshorometro.update = async (data) => {
-    console.log(data);
+    console.log("DATA EN ACTUALIZAR HOROMTERO : ", data);
     const urlUpdate = baseUrl+"/update/"+data.id_dhr
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })

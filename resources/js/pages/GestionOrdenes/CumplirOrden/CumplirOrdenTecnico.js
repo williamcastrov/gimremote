@@ -208,7 +208,7 @@ function CumplirOrdenTecnico(props) {
     }, [grabar])
 
     const seleccionarOrden = (orden, caso) => {
-        //console.log("DATOS ORDEN : ", orden)
+        console.log("DATOS ORDEN : ", orden)
         if (orden.estado_otr === 24 || orden.estado_otr === 27 || orden.estado_otr === 32) {
             swal("Cumplimiento OT", "El estado de la OT no permite cambios", "warning", { button: "Aceptar" });
         } else {

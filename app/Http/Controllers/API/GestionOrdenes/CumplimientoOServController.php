@@ -457,7 +457,7 @@ class CumplimientoOServController extends Controller
       public function updatehorometro(Request $request, $id_actividad){
         try {
           $data['horometro_cosv'] = $request->valorhorometro;
-          //echo $request->horometro_cosv;
+          echo $request->horometro_cosv;
           //echo json_encode($request);
           
           $res = CumplimientoOServ::where("id_actividad",$id_actividad)->update($data);

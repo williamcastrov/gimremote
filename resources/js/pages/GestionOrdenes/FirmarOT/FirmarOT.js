@@ -12,7 +12,7 @@ const { Password } = Input;
 const { Title } = Typography;
 
 // Componentes de Conexion con el Backend
-import firmarotServices from "../../../../services/GestionOrdenes/FirmarOT";
+import firmarotServices from "../../../services/GestionOrdenes/FirmarOT";
 
 
 function FirmarOT(props) {

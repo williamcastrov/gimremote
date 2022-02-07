@@ -13,6 +13,8 @@ import './Actividades.css';
 import { FileAddOutlined, PictureOutlined, CheckSquareOutlined, CloseSquareOutlined, SwitcherOutlined, HighlightOutlined } from '@ant-design/icons';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import { ListGroup } from 'react-bootstrap';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Button as Botton } from "react-bootstrap";
 
 import MoodBadSharpIcon from '@material-ui/icons/MoodBadSharp';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
@@ -29,7 +31,6 @@ import NombreCargoOT from "../../GestionOrdenes/NombreCargoOT";
 
 // Componentes de Conexion con el Backend
 import cumplimientooservServices from "../../../services/GestionOrdenes/CumplimientoOserv";
-import calificacionserviciootServices from "../../../services/GestionOrdenes/CalificacionServicioOT";
 import tipooperacionServices from "../../../services/GestionOrdenes/TipoOperacion";
 import actividadrealizadaServices from "../../../services/GestionOrdenes/ActividadRealizada";
 import crearordenesServices from "../../../services/GestionOrdenes/CrearOrdenes";
@@ -40,6 +41,7 @@ import datoshorometroServices from "../../../services/Mantenimiento/DatosHoromet
 import estadosServices from "../../../services/Parameters/Estados";
 import pendienteotServices from "../../../services/GestionOrdenes/PendienteOT";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
+import firmarotServices from "../../../services/GestionOrdenes/FirmarOT";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -109,7 +111,7 @@ function RegistroActividadesOperario(props) {
   const { id_otr, nombre_emp, razonsocial_cli, telefono_cli, nombre_ciu, email_cli, descripcion_mar, modelo_dequ,
     fechainicia_otr, descripcion_tser, descripcion_tmt, serie_dequ, codigo_equ, descripcion_con, primer_apellido_con,
     primer_nombre_con, horometro_otr, iniciatransporte_otr, finaltransporte_otr, tiempotransporte_otr,
-    tiempoorden_otr, estado_otr
+    tiempoorden_otr, estado_otr, equipo_otr
   } = props.ordenSeleccionado;
 
   const { codigo, descripcion_are, descripcion_cosv, estado_cosv, estadooperacionequipo_cosv, fechafinal_cosv,
@@ -117,8 +119,6 @@ function RegistroActividadesOperario(props) {
     operario_cosv, operariodos_cosv, servicio_cosv, tipo_cosv, tipofallamtto_cosv, tipooperacion_cosv, horometro_cosv,
     cantidad_cosv, valorunitario_cosv
   } = props.listActividadActiva;
-
-  console.log("LEE COMBOS : ", props.leeCombos)
 
   const styles = useStyles();
 
@@ -139,13 +139,12 @@ function RegistroActividadesOperario(props) {
   const [modalActualizarCumplimiento, setModalActualizarCumplimiento] = useState(false);
   const [modalCerrarOrden, setModalCerrarOrden] = useState(false);
   const [modalFotos, setModalFotos] = useState(false);
-  const [modalCalificarServicio, setModalCalificarServicio] = useState(false);
   const [modalEliminarActividad, setModalEliminarActividad] = useState(false);
   const [modalGrabarHorometro, setModalGrabarHorometro] = useState(false);
   const [modalNombreCargo, setModalNombreCargo] = useState(false);
-  const [modalFirmarOT, setModalFirmarOT] = useState(false);
   const [modalOT, setModalOT] = useState(false);
   const [modalCrearPendienteOT, setModalCrearPendienteOT] = useState(false);
+  const [modalInsertarNombreCargo, setModalInsertarNombreCargo] = useState(false);
 
   const [formError, setFormError] = useState(false);
   const [listarTipoOperacion, setListarTipoOperacion] = useState([]);
@@ -155,7 +154,6 @@ function RegistroActividadesOperario(props) {
   const [listarEstados, setListarEstados] = useState([]);
   const [grabar, setGrabar] = React.useState(false);
   const [grabarCambios, setGrabarCambios] = React.useState(false);
-  const [grabarCalificacionOT, setGrabarCalificacionOT] = React.useState(false);
   const [controlHorometro, setControlHorometro] = React.useState(false);
   const fechaactual = Moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   const horaactual = Moment(new Date()).format('HH:mm:ss');
@@ -183,6 +181,7 @@ function RegistroActividadesOperario(props) {
   const [estadoOperacionEquipos, setEstadoOperacionEquipos] = useState(0);
   const [observacion, setObservacion] = useState(0);
   const [datoHorometro, setDatoHorometro] = useState(0);
+  const [horometroActual, setHorometroActual] = useState(0);
   const [horometro, setHorometro] = useState(horometro_otr);
   const [observacionPendienteOT, setObservacionPendienteOT] = useState("");
   const [tiempoTransporte, setTiempoTransporte] = useState(tiempotransporte_otr);
@@ -240,11 +239,6 @@ function RegistroActividadesOperario(props) {
     valorhorometro: ""
   });
 
-  const [calificacionServicioOTSeleccionado, setCalificacionServicioOTSeleccionado] = useState({
-    ot_cse: "",
-    valorservicio_cse: 0
-  })
-
   let tecnico = 0;
   const [pendienteSeleccionado, setPendienteSeleccionado] = useState({
     id: "",
@@ -269,6 +263,14 @@ function RegistroActividadesOperario(props) {
       //console.log(res.data);
     }
     fetchDataTiposMtto();
+
+    async function fetchDataHrometroActual() {
+      const res = await datoshorometroServices.listUnDatoHorometro(equipo_otr);
+      setHorometroActual(res.data[0].valorhorometro_dhr)
+      //console.log("VALOR HOROMETRO ACTUAL : ", res.data[0].valorhorometro_dhr);
+    }
+    fetchDataHrometroActual();
+
   }, [])
 
   useEffect(() => {
@@ -327,7 +329,7 @@ function RegistroActividadesOperario(props) {
     fetchDataCombos();
   }, [])
 
- 
+
   useEffect(() => {
     /*
     async function fetchDataOrdenes() {
@@ -400,22 +402,6 @@ function RegistroActividadesOperario(props) {
     setModalFotos(false);
   }
 
-  const abrirModalCalificarServicio = () => {
-    setModalCalificarServicio(true);
-  }
-
-  const cerrarModalCalificarServicio = () => {
-    setModalCalificarServicio(false);
-  }
-
-  const abrirModalFirmarOT = () => {
-    setModalFirmarOT(true);
-  }
-
-  const cerrarModalFirmarOT = () => {
-    setModalFirmarOT(false);
-  }
-
   const abrirModalOT = () => {
     setModalOT(true);
   }
@@ -433,6 +419,7 @@ function RegistroActividadesOperario(props) {
   }
 
   const abrirModalNombreCargo = () => {
+    setModalInsertarNombreCargo(true);
     setModalNombreCargo(true);
   }
 
@@ -466,6 +453,23 @@ function RegistroActividadesOperario(props) {
     //console.log("DATOS DE LA ORDEN : ", listUnaOrden[0])
 
     console.log("VALOR ACTUALIZADO ORDEN", props.listActividadActiva);
+
+    if (res.data.length === 0) {
+      console.log("Información Firmas : ", res.data);
+      swal("Control Firma OT", "La actividad no registra firma", "warning", { button: "Aceptar" });
+      return
+    }
+
+    if (res.success) {
+      swal("Firma OT Cliente", "Grabada de Forma Correcta!", "success", { button: "Aceptar" });
+      console.log(res.message)
+      abrirCerrarModalPendienteOT();
+    }
+    else {
+      swal("Firma OT Client", "Error Grabando Firma de la OT!", "error", { button: "Aceptar" });
+      console.log(res.message);
+      abrirCerrarModalPendienteOT();
+    }
 
     if (!props.listActividadActiva.horometro_cosv) {
       swal("Horometro", "El valor del Horometro no puede ser CERO", "warning", { button: "Aceptar" });
@@ -504,15 +508,6 @@ function RegistroActividadesOperario(props) {
           swal("Orden de Servicio", "Error Cerrando la Orden de Trabajo!", "success", { button: "Aceptar" });
         console.log(res.message)
       }
-    }
-  }
-
-  const FirmarOrden = () => {
-    //console.log("DATOS ORDEN : ", orden)
-    if (estado_otr === 24 || estado_otr === 27 || estado_otr === 32) {
-      swal("Cumplimiento OT", "El estado de la OT no permite cambios", "warning", { button: "Aceptar" });
-    } else {
-      abrirModalFirmarOT()
     }
   }
 
@@ -569,7 +564,7 @@ function RegistroActividadesOperario(props) {
   }
 
   const grabarValorHorometro = async () => {
-    const res = await datoshorometroServices.listUnDatoHorometro(props.ordenSeleccionado.equipo_otr);
+    const res = await datoshorometroServices.listUnDatoHorometro(equipo_otr);
 
     //console.log("DATOS HOROMETERO : ", res.data)
 
@@ -577,7 +572,7 @@ function RegistroActividadesOperario(props) {
       {
         setHorometroSeleccionado([{
           id_dhr: 0,
-          codigoequipo_dhr: props.ordenSeleccionado.equipo_otr,
+          codigoequipo_dhr: equipo_otr,
           valorhorometro_dhr: horometro
         }]);
       }
@@ -589,12 +584,13 @@ function RegistroActividadesOperario(props) {
         return
       }
       setDatoHorometro(2);
+
     }
 
     if (res.data) {
       setHorometroSeleccionado([{
         id_dhr: res.data[0].id_dhr,
-        codigoequipo_dhr: props.ordenSeleccionado.equipo_otr,
+        codigoequipo_dhr: equipo_otr,
         valorhorometro_dhr: horometro
       }]);
     }
@@ -627,7 +623,7 @@ function RegistroActividadesOperario(props) {
       fechainicia_otr: props.ordenSeleccionado.fechainicia_otr,
       fechafinal_otr: props.ordenSeleccionado.fechafinal_otr,
       diasoperacion_otr: 0,
-      equipo_otr: props.ordenSeleccionado.equipo_otr,
+      equipo_otr: equipo_otr,
       proveedor_otr: props.ordenSeleccionado.proveedor_otr,
       cliente_otr: props.ordenSeleccionado.cliente_otr,
       operario_otr: props.ordenSeleccionado.operario_otr,
@@ -650,54 +646,33 @@ function RegistroActividadesOperario(props) {
     async function grabarValorHorometro() {
 
       if (controlHorometro) {
-        //console.log("VALOR DEL HOROMETRO : ", orden[0])
-        //console.log("ACTUALIZA O GRABA : ", datoHorometro)
+        console.log("VALOR DEL HOROMETRO : ", orden[0])
+        console.log("ACTUALIZA O GRABA : ", datoHorometro)
+        console.log("DATOS CONTOL HOROMETRO :", horometroSeleccionado[0])
 
-        const res = await crearordenesServices.update(orden[0]);
+        // Web service actualiza datos Horometro en la Actividad
+        const result = await cumplimientooservServices.updatehorometro(horometroActividad[0]);
+       
+        if (result.success) {
+          swal("Control Horometro Actividad", "Control del Horometro Actvidad Actualizado!", "success", { button: "Aceptar" });
+          
+          const rest = await datoshorometroServices.update(horometroSeleccionado[0]);
 
-        if (res.success) {
-          swal("Horometro", "Valor del Horometro Actualizado!", "success", { button: "Aceptar" });
-          console.log(res.message)
-
-          if (datoHorometro === 1) {
-            const rest = await datoshorometroServices.save(horometroSeleccionado[0]);
-            if (rest.success) {
-              swal("Control Horometro", "Control del Horometro Grabado!", "success", { button: "Aceptar" });
-              console.log(res.message)
-            } else {
-              swal("Control Horometro", "Error Grabando Control del Horometro!", "error", { button: "Aceptar" });
-              console.log(res.message);
-            }
-          } else {
-            if (datoHorometro === 2) {
-              const rest = await datoshorometroServices.update(horometroSeleccionado[0]);
-              if (rest.success) {
-                swal("Control Horometro", "Control del Horometro Actualizado!", "success", { button: "Aceptar" });
-                console.log(res.message)
-              } else {
-                swal("Control Horometro", "Error Actualizando Control del Horometro!", "error", { button: "Aceptar" });
-                console.log(res.message);
-              }
-            }
-          }
-
-          // Web service actualiza datos Horometro en la Actividad
-          const result = await cumplimientooservServices.updatehorometro(horometroActividad[0]);
-
-          if (result.success) {
-            swal("Control Horometro Actividad", "Control del Horometro Actvidad Actualizado!", "success", { button: "Aceptar" });
+          if (rest.success) {
+            swal("Control Horometro", "Control del Horometro Actualizado!", "success", { button: "Aceptar" });
             console.log(res.message)
           } else {
-            swal("Control Horometro", "Error Actualizando Control del Horometro Actividad!", "error", { button: "Aceptar" });
+            swal("Control Horometro", "Error Actualizando Control del Horometro!", "error", { button: "Aceptar" });
             console.log(res.message);
           }
-
         } else {
-          swal("Horometro", "Error Actualizando Valor del Horometro!", "error", { button: "Aceptar" });
+          swal("Control Horometro", "Error Actualizando Control del Horometro Actividad!", "error", { button: "Aceptar" });
           console.log(res.message);
         }
+
         setControlHorometro(false);
         cerrarModalGrabarHorometro();
+
       }
     }
     grabarValorHorometro();
@@ -1015,10 +990,6 @@ function RegistroActividadesOperario(props) {
     abrirModalFoto()
   }
 
-  const calificarServicio = () => {
-    abrirModalCalificarServicio()
-  }
-
   const agregarCumplimientoOperacion = () => {
     //console.log("DATOS ACTIVIDAD ID: ", id)
     // the item selected
@@ -1086,50 +1057,6 @@ function RegistroActividadesOperario(props) {
     }
     abrirModalEditar();
   };
-
-  const grabarCalificacionServicio = (valor) => {
-    swal({
-      title: "Confirmar Calificación?",
-      text: "Registrar esta Calificacion!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: false,
-    })
-      .then((willDelete) => {
-        if (willDelete) {
-          {
-            setCalificacionServicioOTSeleccionado([{
-              ot_cse: id_actividad,
-              valorservicio_cse: valor
-            }]);
-          }
-          setGrabarCalificacionOT(true);
-        } else {
-          return
-        }
-      });
-  }
-
-  useEffect(() => {
-    async function grabarCalificacion() {
-
-      if (grabarCalificacionOT) {
-        //console.log("DATOS CALIFICACION SERVICIO : ", calificacionServicioOTSeleccionado[0])
-
-        const res = await calificacionserviciootServices.save(calificacionServicioOTSeleccionado[0]);
-
-        if (res.success) {
-          swal("Calificación Servicio", "Grabado de forma Correcta!", "success", { button: "Aceptar" });
-          console.log(res.message)
-        } else {
-          swal("Calificación Servicio", "Error Grabando Calificación!", "error", { button: "Aceptar" });
-          console.log(res.message);
-        }
-        setGrabarCalificacion(false);
-      }
-    }
-    grabarCalificacion();
-  }, [grabarCalificacionOT])
 
   const cumplimiento = [
     {
@@ -1233,22 +1160,50 @@ function RegistroActividadesOperario(props) {
             </Item>
           </Col>
         </Row>
-
         <Row justify="center"  >
           <Col span={8}>
             <Item
-              label="Referencia"
+              label="Combo: "
             >
-              <Input
-                name='referencia_cosv'
-                defaultValue={referencia}
-                disabled="true"
-                onChange={(e) => setReferencia(e.target.value)}
-                value={cumplimientoSeleccionado && cumplimientoSeleccionado.referencia_cosv}
-              ></Input>
+              <Select
+                style={{ width: 220 }}
+                name="combogrupo_cosv"
+                placeholder="Seleccione el compooente del Mtto"
+                onChange={seleccionarCodigoCombo}
+              >
+                {
+                  leeCombos && leeCombos.map((itemselect) => {
+                    return (
+                      <Option value={itemselect.id_equ}>{itemselect.codigo_equ}</Option>
+                    )
+                  })
+                }
+              </Select>
             </Item>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
+            <Item
+              label="Tipo de Actividad"
+            >
+              <Select
+                style={{ width: 220 }}
+                name="tipo_cosv"
+                placeholder="Ingrese el Tipo de Actividad"
+                onChange={seleccionarTipoActividad}
+              >
+                {
+                  listarTiposMtto && listarTiposMtto.map((itemselect) => {
+                    return (
+                      <Option value={itemselect.id_tmt}>{itemselect.descripcion_tmt}</Option>
+                    )
+                  })
+                }
+              </Select>
+            </Item>
+          </Col>
+        </Row>
+        <Row justify="center"  >
+          <Col span={8}>
             <Item
               label="Falla Mtto"
             >
@@ -1270,7 +1225,7 @@ function RegistroActividadesOperario(props) {
           </Col>
           <Col span={8}>
             <Item
-              label="Tipo"
+              label="Tipo de Falla"
             >
               <Select
                 style={{ width: 220 }}
@@ -1290,46 +1245,6 @@ function RegistroActividadesOperario(props) {
           </Col>
         </Row>
         <Row justify="center"  >
-          <Col span={8}>
-            <Item
-              label="Tipo de Actividad"
-            >
-              <Select
-                style={{ width: 220 }}
-                name="tipo_cosv"
-                placeholder="Ingrese el Tipo de Actividad"
-                onChange={seleccionarTipoActividad}
-              >
-                {
-                  listarTiposMtto && listarTiposMtto.map((itemselect) => {
-                    return (
-                      <Option value={itemselect.id_tmt}>{itemselect.descripcion_tmt}</Option>
-                    )
-                  })
-                }
-              </Select>
-            </Item>
-          </Col>
-          <Col span={4}>
-            <Item
-              label="Combo: "
-            >
-              <Select
-                style={{ width: 220 }}
-                name="combogrupo_cosv"
-                placeholder="Seleccione el compooente del Mtto"
-                onChange={seleccionarCodigoCombo}
-              >
-                {
-                  leeCombos && leeCombos.map((itemselect) => {
-                    return (
-                      <Option value={itemselect.id_equ}>{itemselect.codigo_equ}</Option>
-                    )
-                  })
-                }
-              </Select>
-            </Item>
-          </Col>
         </Row>
         <Row justify="lef">
           <Col span={14}>
@@ -1345,66 +1260,8 @@ function RegistroActividadesOperario(props) {
             </Item>
           </Col>
         </Row>
-        <Row justify="center">
-          <Col span={8}>
-            <Item
-              label="Fecha Inicia"
-            >
-              <Input
-                name='fechainicia_cosv'
-                type="datetime-local"
-                value={finaltransporte_cosv}
-                disabled="true"
-                onChange={(e) => setFechainicial(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-                defaultValue={Moment(inventariosSeleccionado.fechaactual).format('YYYY-MM-DD HH:mm:ss')}
-                value={cumplimientoSeleccionado && cumplimientoSeleccionado.fechainicia_cosv}
-              >
-              </Input>
-            </Item>
-          </Col>
-          <Col span={8}>
-            <Item
-              label="Fecha Finaliza"
-            >
-              <Input
-                name='fechafinal_cosv'
-                type="datetime-local"
-                value={fechafinal}
-                disabled="true"
-                onChange={(e) => setFechafinal(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-                defaultValue={Moment(inventariosSeleccionado.fechaactual).format('YYYY-MM-DD HH:mm:ss')}
-                value={cumplimientoSeleccionado && cumplimientoSeleccionado.fechafinal_cosv}
-              >
-              </Input>
-            </Item>
-          </Col>
-          <Col span={8}>
-            <Item
-              label="Servicio :"
-            >
-              <Select
-                style={{ width: 220 }}
-                name="servicio_cosv"
-                defaultValue={servicio}
-                placeholder="Seleccione Servicio Realizado"
-                onChange={handleChanged}
-              //onChange={(e) => setServicioRealizado(e.target.value)}
-              >
-                {
-                  listarActividadRealizada && listarActividadRealizada.map((itemselect) => {
-                    return (
-                      <Option value={itemselect.id_are}>{itemselect.descripcion_are}</Option>
-                    )
-                  })
-                }
-              </Select>
-            </Item>
-          </Col>
-        </Row>
         <Row justify="left">
-          <Col span={16}>
+          <Col span={14}>
             <Item
               label="Observaciones"
             >
@@ -1762,7 +1619,7 @@ function RegistroActividadesOperario(props) {
   const grabarHorometro = (
     <div className="App">
       <Title align="center" type="warning" level={4}>
-        VALOR HOROMETRO ACTUAL {props.ordenSeleccionado.horometro_otr}
+        VALOR HOROMETRO ACTUAL {horometroActual}
       </Title>
       <Title align="center" type="warning" level={4}>
         INGRESAR VALOR DEL HOROMETRO # {props.ordenSeleccionado.codigo_equ}
@@ -1775,7 +1632,7 @@ function RegistroActividadesOperario(props) {
             <Input
               name="id"
               type="number"
-              onChange={(e) => setHorometro(e.target.value + 0.5)}
+              onChange={(e) => setHorometro(e.target.value)}
             ></Input>
           </Item>
         </Col>
@@ -1812,62 +1669,6 @@ function RegistroActividadesOperario(props) {
         <Button onClick={() => borraActividadOrden()}> Confirmar </Button>
         <Button onClick={() => abrirCerrarModalEliminarActividad()}> Cancelar </Button>
       </div>
-    </div>
-  )
-
-  const calificarServicioOT = (
-    <div >
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-
-      <Container className={styles.floatingbutton} >
-        <Bottom
-          tooltip="5 - Muy Bueno"
-          rotate={true}
-          styles={{ backgroundColor: darkColors.green, color: lightColors.white }}
-          onClick={() => grabarCalificacionServicio(5)} ><SentimentVerySatisfiedIcon />
-        </Bottom>
-        <Bottom
-          tooltip="4 - Bueno"
-          rotate={true}
-          styles={{ backgroundColor: darkColors.yellow, color: lightColors.white }}
-          onClick={() => grabarCalificacionServicio(4)} ><SentimentSatisfiedIcon />
-        </Bottom>
-        <Bottom
-          tooltip="3 - Regular"
-          rotate={true}
-          styles={{ backgroundColor: darkColors.blue, color: lightColors.white }}
-          onClick={() => grabarCalificacionServicio(3)} ><SentimentDissatisfiedIcon />
-        </Bottom>
-        <Bottom
-          tooltip="2 - Mal"
-          rotate={true}
-          styles={{ backgroundColor: darkColors.orange, color: lightColors.white }}
-          onClick={() => grabarCalificacionServicio(2)} ><MoodBadSharpIcon />
-        </Bottom>
-        <Bottom
-          tooltip="1 - Muy Mal"
-          rotate={true}
-          styles={{ backgroundColor: darkColors.red, color: lightColors.white }}
-          onClick={() => grabarCalificacionServicio(1)} > < SentimentVeryDissatisfiedIcon />
-        </Bottom>
-        <Bottom
-          tooltip="Calificar el servicio!"
-          rotate={true}
-          styles={{ backgroundColor: darkColors.lightBlue, color: lightColors.white }}
-          onClick={() => alert('Seleccione La Calificacion del Servicio!')} ><ZoomOutMapIcon /></Bottom>
-      </Container>
     </div>
   )
 
@@ -1928,13 +1729,7 @@ function RegistroActividadesOperario(props) {
             ACTIVIDADES REALIZADAS
           </ListGroup.Item>
           <ListGroup.Item as="li" type="button" onClick={() => abrirModalNombreCargo()} variant="secondary">
-            NOMBRE Y CARGO FUNCIONARIO
-          </ListGroup.Item>
-          <ListGroup.Item as="li" type="button" onClick={() => calificarServicio()} variant="secondary">
-            CALIFICAR EL SERVICIO
-          </ListGroup.Item>
-          <ListGroup.Item as="li" type="button" onClick={() => FirmarOrden()} variant="secondary">
-            FIRMAR ORDEN DE TRABAJO
+            CALIFICAR, FIRMAR, NOMBRE Y CARGO FUNCIONARIO
           </ListGroup.Item>
           <ListGroup.Item as="li" type="button" onClick={() => abrirModalCrearPendienteOT()} variant="secondary">
             CREAR PENDIENTE OT
@@ -2015,18 +1810,6 @@ function RegistroActividadesOperario(props) {
       </Modal>
 
       <Modal
-        title="FIRMAR OT" visible={modalFirmarOT}
-        onOk={cerrarModalFoto}
-        width={800}
-        closable={false}
-        footer={[
-          <Button type="primary" danger onClick={cerrarModalFirmarOT} > Cancelar </Button>,
-        ]}
-      >
-        <FirmarOT id_actividad={id_actividad} />
-      </Modal>
-
-      <Modal
         title="GRABAR HOROMETRO" visible={modalGrabarHorometro}
         onOk={cerrarModalGrabarHorometro}
         width={1000}
@@ -2053,28 +1836,19 @@ function RegistroActividadesOperario(props) {
       </Modal>
 
       <Modal
-        title="NOMBRE Y CARGO FUNCIONARIO" visible={modalNombreCargo}
+        title="CALIFICAR, FIRMAR Y CARGO FUNCIONARIO" visible={modalNombreCargo}
         onOk={cerrarModalNombreCargo}
         width={1000}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalNombreCargo} > Cancelar </Button>,
+          <Botton className="boton" type="primary" danger onClick={cerrarModalNombreCargo} > Cancelar </Botton>,
         ]}
       >
-        <NombreCargoOT id_actividad={id_actividad} />
-      </Modal>
-
-      <Modal
-        title="CALIFICAR SERVICIO" visible={modalCalificarServicio}
-        onOk={cerrarModalCalificarServicio}
-        width={400}
-        high={400}
-        closable={false}
-        footer={[
-          <Button type="primary" danger onClick={cerrarModalCalificarServicio} > Cancelar </Button>,
-        ]}
-      >
-        {calificarServicioOT}
+        <NombreCargoOT id_actividad={id_actividad}
+          modalInsertarNombreCargo={modalInsertarNombreCargo}
+          setModalInsertarNombreCargo={setModalInsertarNombreCargo}
+          estado_otr={estado_otr}
+        />
       </Modal>
     </div>
   );
