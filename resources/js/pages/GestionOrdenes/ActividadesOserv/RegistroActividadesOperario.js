@@ -250,7 +250,7 @@ function RegistroActividadesOperario(props) {
     solicitudrepuesto_pot: 0,
     respuestarepuesto_pot: 0,
     observacionrespuesta_pot: 0,
-    estado_pot: "",
+    estado_pot: 84,
     novedad_pot: "",
     fechacierre_pot: "",
     descripcion_pot: ""
@@ -454,6 +454,8 @@ function RegistroActividadesOperario(props) {
 
     console.log("VALOR ACTUALIZADO ORDEN", props.listActividadActiva);
 
+    const res = await firmarotServices.listfirmasot(id_actividad);
+
     if (res.data.length === 0) {
       console.log("Información Firmas : ", res.data);
       swal("Control Firma OT", "La actividad no registra firma", "warning", { button: "Aceptar" });
@@ -463,12 +465,10 @@ function RegistroActividadesOperario(props) {
     if (res.success) {
       swal("Firma OT Cliente", "Grabada de Forma Correcta!", "success", { button: "Aceptar" });
       console.log(res.message)
-      abrirCerrarModalPendienteOT();
     }
     else {
       swal("Firma OT Client", "Error Grabando Firma de la OT!", "error", { button: "Aceptar" });
       console.log(res.message);
-      abrirCerrarModalPendienteOT();
     }
 
     if (!props.listActividadActiva.horometro_cosv) {
@@ -480,6 +480,7 @@ function RegistroActividadesOperario(props) {
       swal("Horometro", "El valor del Horometro no puede ser CERO", "warning", { button: "Aceptar" });
       return
     } else {
+      console.log("PASAR A REVISION ACTIVIDAD", id_actividad);
       const res = await cumplimientooservServices.pasararevision(id_actividad);
 
       if (res.success) {
@@ -524,7 +525,7 @@ function RegistroActividadesOperario(props) {
         solicitudrepuesto_pot: 0,
         respuestarepuesto_pot: 0,
         observacionrespuesta_pot: actividadrealizada,
-        estado_pot: 83,
+        estado_pot: 84,
         novedad_pot: "",
         fechacierre_pot: fechaactual,
         descripcion_pot: observacionPendienteOT
@@ -1109,7 +1110,7 @@ function RegistroActividadesOperario(props) {
       </Title>
       <Form {...layout} >
         <Row justify="center" >
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Id Cumplimiento"
             >
@@ -1123,7 +1124,7 @@ function RegistroActividadesOperario(props) {
               ></Input>
             </Item>
           </Col>
-          <Col span={6}>
+          <Col lg={6}>
             <Item
               label="OT #"
             >
@@ -1137,7 +1138,7 @@ function RegistroActividadesOperario(props) {
               ></Input>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Tipo Mtto"
             >
@@ -1161,7 +1162,7 @@ function RegistroActividadesOperario(props) {
           </Col>
         </Row>
         <Row justify="center"  >
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Combo: "
             >
@@ -1181,7 +1182,7 @@ function RegistroActividadesOperario(props) {
               </Select>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Tipo de Actividad"
             >
@@ -1203,7 +1204,7 @@ function RegistroActividadesOperario(props) {
           </Col>
         </Row>
         <Row justify="center"  >
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Falla Mtto"
             >
@@ -1223,7 +1224,7 @@ function RegistroActividadesOperario(props) {
               </Select>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Tipo de Falla"
             >
@@ -1247,7 +1248,7 @@ function RegistroActividadesOperario(props) {
         <Row justify="center"  >
         </Row>
         <Row justify="lef">
-          <Col span={14}>
+          <Col lg={14}>
             <Item
               label="Actividad Realizada"
             >
@@ -1261,7 +1262,7 @@ function RegistroActividadesOperario(props) {
           </Col>
         </Row>
         <Row justify="left">
-          <Col span={14}>
+          <Col lg={14}>
             <Item
               label="Observaciones"
             >
@@ -1273,7 +1274,7 @@ function RegistroActividadesOperario(props) {
               ></Input>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Estado del Equipo"
             >
@@ -1306,7 +1307,7 @@ function RegistroActividadesOperario(props) {
       </Title>
       <Form {...layout} >
         <Row justify="center" >
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Id Cumplimiento"
             >
@@ -1320,7 +1321,7 @@ function RegistroActividadesOperario(props) {
               ></Input>
             </Item>
           </Col>
-          <Col span={6}>
+          <Col lg={6}>
             <Item
               label="OT #"
             >
@@ -1334,7 +1335,7 @@ function RegistroActividadesOperario(props) {
               ></Input>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Tipo Mtto"
             >
@@ -1359,7 +1360,7 @@ function RegistroActividadesOperario(props) {
         </Row>
 
         <Row justify="center"  >
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Referencia"
             >
@@ -1372,7 +1373,7 @@ function RegistroActividadesOperario(props) {
               ></Input>
             </Item>
           </Col>
-          <Col span={6}>
+          <Col lg={6}>
             <Item
               label="Falla Mtto"
             >
@@ -1393,7 +1394,7 @@ function RegistroActividadesOperario(props) {
               </Select>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Tipo"
             >
@@ -1416,7 +1417,7 @@ function RegistroActividadesOperario(props) {
           </Col>
         </Row>
         <Row justify="lef">
-          <Col span={14}>
+          <Col lg={14}>
             <Item
               label="Actividad Realizada"
             >
@@ -1430,7 +1431,7 @@ function RegistroActividadesOperario(props) {
           </Col>
         </Row>
         <Row justify="center">
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Fecha Inicia"
             >
@@ -1446,7 +1447,7 @@ function RegistroActividadesOperario(props) {
               </Input>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Fecha Finaliza"
             >
@@ -1462,7 +1463,7 @@ function RegistroActividadesOperario(props) {
               </Input>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Servicio :"
             >
@@ -1487,7 +1488,7 @@ function RegistroActividadesOperario(props) {
           </Col>
         </Row>
         <Row justify="left">
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Cantidad"
             >
@@ -1501,7 +1502,7 @@ function RegistroActividadesOperario(props) {
               </Input>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Valor Unitario"
             >
@@ -1517,7 +1518,7 @@ function RegistroActividadesOperario(props) {
               />
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Valor Total"
             >
@@ -1535,7 +1536,7 @@ function RegistroActividadesOperario(props) {
           </Col>
         </Row>
         <Row justify="left">
-          <Col span={16}>
+          <Col lg={16}>
             <Item
               label="Observaciones"
             >
@@ -1547,7 +1548,7 @@ function RegistroActividadesOperario(props) {
               ></Input>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col lg={8}>
             <Item
               label="Estado del Equipo"
             >
@@ -1625,7 +1626,7 @@ function RegistroActividadesOperario(props) {
         INGRESAR VALOR DEL HOROMETRO # {props.ordenSeleccionado.codigo_equ}
       </Title>
       <Row justify="center">
-        <Col span={16}>
+        <Col lg={16}>
           <Item
             label="Ingresar Valor del Horometro"
           >
@@ -1646,7 +1647,7 @@ function RegistroActividadesOperario(props) {
         Crear Pendiente OT #{props.listActividadActiva.id_cosv}
       </Title>
       <Row justify="center">
-        <Col span={16}>
+        <Col lg={16}>
           <Item
             label="Ingrese Observación"
           >

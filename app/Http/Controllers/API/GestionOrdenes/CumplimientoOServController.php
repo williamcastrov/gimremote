@@ -258,7 +258,7 @@ class CumplimientoOServController extends Controller
                                     ordenservicio.subgrupoequipo_otr = t8.id_sgre and ordenservicio.equipo_otr       = t10.id_equ  and
                                     ordenservicio.prioridad_otr 	   = t11.id_abc and ordenservicio.tipo_otr      	 = t12.id_tmt  and
                                     t10.marca_equ  	                 = t13.id_mar and ordenservicio.tiposervicio_otr = t15.id_tser and
-                                    ordenservicio.tipooperacion_otr  = t16.id_tope and (ordenservicio.estado_otr IN (21,22,23,25,26,34 ))
+                                    ordenservicio.tipooperacion_otr  = t16.id_tope and (t17.estado_cosv IN (21,22,23,25,34 ))
                               ORDER BY id_otr DESC");
           
           if ($data) {
@@ -306,7 +306,7 @@ class CumplimientoOServController extends Controller
                                     ordenservicio.subgrupoequipo_otr = t8.id_sgre and ordenservicio.equipo_otr       = t10.id_equ  and
                                     ordenservicio.prioridad_otr 	   = t11.id_abc and ordenservicio.tipo_otr      	 = t12.id_tmt  and
                                     t10.marca_equ  	                 = t13.id_mar and ordenservicio.tiposervicio_otr = t15.id_tser and
-                                    ordenservicio.tipooperacion_otr  = t16.id_tope and (ordenservicio.estado_otr IN (21,22,23,25,26,34 ))
+                                    ordenservicio.tipooperacion_otr  = t16.id_tope and (t17.estado_cosv IN (21,22,23,25,34 ))
                               ORDER BY id_otr DESC");
           
           if ($data) {
