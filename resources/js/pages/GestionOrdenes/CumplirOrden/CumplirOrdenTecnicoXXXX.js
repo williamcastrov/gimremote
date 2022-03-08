@@ -271,7 +271,7 @@ function CumplirOrdenTecnico(props) {
             <br />
             <Modal title="CONSULTAR OT" visible={modalOT} onOk={cerrarModalOT} width={900} closable={false}
                 footer={[
-                    <Button type="primary" danger onClick={cerrarModalOT} > Cancelar </Button>,
+                    <Button type="primary" danger onClick={cerrarModalOT} > Regresar </Button>,
                 ]}
             >
                 {consultarOT}
@@ -279,7 +279,7 @@ function CumplirOrdenTecnico(props) {
 
             <Modal title="CUMPLIMIENTO OT" visible={modalEditar} onOk={cerrarModalEditar} width={1100} closable={false}
                 footer={[
-                    <Button type="primary" danger onClick={cerrarModalEditar} > Cancelar </Button>,
+                    <Button type="primary" danger onClick={cerrarModalEditar} > Regresar </Button>,
                 ]}
             >
                 {ordenEditar}

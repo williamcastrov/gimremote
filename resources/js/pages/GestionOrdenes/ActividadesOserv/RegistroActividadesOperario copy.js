@@ -1799,7 +1799,7 @@ function RegistroActividadesOperario(props) {
       <p>Estás seguro que deseas eliminar el Cumplimiento de la Orden <b>{cumplimientoSeleccionado && cumplimientoSeleccionado.id}</b>? </p>
       <div align="right">
         <Button onClick={() => borraActividadOrden()}> Confirmar </Button>
-        <Button onClick={() => abrirCerrarModalEliminarActividad()}> Cancelar </Button>
+        <Button onClick={() => abrirCerrarModalEliminarActividad()}> Regresar </Button>
       </div>
     </div>
   )
@@ -1936,7 +1936,7 @@ function RegistroActividadesOperario(props) {
 
       <Modal title="DATOS OT" visible={modalOT} onOk={cerrarModalOT} width={700} closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalOT} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalOT} > Regresar </Button>,
         ]}
       >
         {DatosOT}
@@ -1944,7 +1944,7 @@ function RegistroActividadesOperario(props) {
 
       <Modal title="CUMPLIMIENTO OT" visible={modalEditar} onOk={cerrarModalEditar} width={1200} closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalEditar} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalEditar} > Regresar </Button>,
           <Button type="primary" onClick={grabarCumplimiento} > Enviar </Button>
         ]}
       >
@@ -1969,7 +1969,7 @@ function RegistroActividadesOperario(props) {
         width={1250}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalActualizarCumplimiento} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalActualizarCumplimiento} > Regresar </Button>,
           <Button type="primary" onClick={guardarCambiosCumplimiento} > Enviar </Button>
         ]}
       >
@@ -1997,7 +1997,7 @@ function RegistroActividadesOperario(props) {
         width={600}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalFoto} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalFoto} > Regresar </Button>,
         ]}
       >
         <Images numeroactividad={id_actividad} operario={operario} />
@@ -2009,7 +2009,7 @@ function RegistroActividadesOperario(props) {
         width={800}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalFirmarOT} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalFirmarOT} > Regresar </Button>,
         ]}
       >
         <FirmarOT id_actividad={id_actividad} />
@@ -2021,7 +2021,7 @@ function RegistroActividadesOperario(props) {
         width={1000}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalGrabarHorometro} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalGrabarHorometro} > Regresar </Button>,
           <Button type="primary" onClick={grabarValorHorometro} > Enviar </Button>
         ]}
       >
@@ -2034,7 +2034,7 @@ function RegistroActividadesOperario(props) {
         width={1000}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalCrearPendienteOT} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalCrearPendienteOT} > Regresar </Button>,
           <Button type="primary" onClick={crearPendiente} > Enviar </Button>
         ]}
       >
@@ -2047,7 +2047,7 @@ function RegistroActividadesOperario(props) {
         width={1000}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalNombreCargo} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalNombreCargo} > Regresar </Button>,
         ]}
       >
         <NombreCargoOT id_actividad={id_actividad} />
@@ -2060,7 +2060,7 @@ function RegistroActividadesOperario(props) {
         high={400}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalCalificarServicio} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalCalificarServicio} > Regresar </Button>,
         ]}
       >
         {calificarServicioOT}

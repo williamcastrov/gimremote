@@ -117,8 +117,10 @@ function RegistroActividadesOperario(props) {
   const { codigo, descripcion_are, descripcion_cosv, estado_cosv, estadooperacionequipo_cosv, fechafinal_cosv,
     fechainicia_cosv, fechaprogramada_cosv, finaltransporte_cosv, id, id_cosv, id_actividad, iniciatransporte_cosv,
     operario_cosv, operariodos_cosv, servicio_cosv, tipo_cosv, tipofallamtto_cosv, tipooperacion_cosv, horometro_cosv,
-    cantidad_cosv, valorunitario_cosv
+    cantidad_cosv, valorunitario_cosv, tipomantenimiento
   } = props.listActividadActiva;
+  
+  console.log("ID USUARIO : ", props.idUsu);
 
   const styles = useStyles();
 
@@ -359,7 +361,7 @@ function RegistroActividadesOperario(props) {
   const seleccionarCumplimiento = (cumplimiento, caso) => {
     //console.log("DATOS CUMPLIMIENTO : ", cumplimiento)
     setCumplimientoSeleccionado(cumplimiento);
-    (caso === "Editar") ? abrirModalActualizarCumplimiento() : abrirCerrarModalEliminarActividad()
+    (caso === "Editar") ? abrirModalActualizarCumplimiento() : abrirModalEliminarActividad()
   }
 
   const abrirModalEditar = () => {
@@ -427,8 +429,12 @@ function RegistroActividadesOperario(props) {
     setModalNombreCargo(false);
   }
 
-  const abrirCerrarModalEliminarActividad = () => {
-    setModalEliminarActividad(!modalEliminarActividad);
+  const abrirModalEliminarActividad = () => {
+    setModalEliminarActividad(true);
+  }
+
+  const cerrarModalEliminarActividad = () => {
+    setModalEliminarActividad(false);
   }
 
   const consultarCumplimiento = () => {
@@ -452,10 +458,13 @@ function RegistroActividadesOperario(props) {
   const pasarARevision = async () => {
     //console.log("DATOS DE LA ORDEN : ", listUnaOrden[0])
 
-    console.log("VALOR ACTUALIZADO ORDEN", props.listActividadActiva);
+    //console.log("VALOR ACTUALIZADO ORDEN", props.listActividadActiva);
 
     const res = await firmarotServices.listfirmasot(id_actividad);
 
+    if(props.idUsu != 1 || props.idUsu != 2 || props.idUsu != 3 || props.idUsu != 4 || props.idUsu != 26){
+      console.log("PERMISO USUARIOS TERMINAN ORDEN SIN FIRMA");
+    }else
     if (res.data.length === 0) {
       console.log("Información Firmas : ", res.data);
       swal("Control Firma OT", "La actividad no registra firma", "warning", { button: "Aceptar" });
@@ -771,7 +780,7 @@ function RegistroActividadesOperario(props) {
         iniciatransporte_cosv: iniciatransporte_cosv,
         finaltransporte_cosv: finaltransporte_cosv,
         tiempotransporte_cosv: tiempoTransporte,
-        estado_cosv: "",
+        estado_cosv: 23,
         horometro_cosv: 0,
         combogrupo_cosv: codigoCombo,
         idcomponente: "0",
@@ -853,12 +862,12 @@ function RegistroActividadesOperario(props) {
 
   const borraActividadOrden = async () => {
 
-    const res = await cumplimientooservServices.delete(cumplimientoSeleccionado.id);
+    const res = await cumplimientooservServices.delete(id_actividad);
 
     if (res.success) {
       swal("Actividad de la Orden", "Borrada de forma Correcta!", "success", { button: "Aceptar" });
       console.log(res.message)
-      abrirCerrarModalEliminarActividad();
+      cerrarModalEliminarActividad();
 
       delete cumplimientoSeleccionado.descripcion_cosv;
       delete cumplimientoSeleccionado.tipooperacion_cosv;
@@ -1035,6 +1044,7 @@ function RegistroActividadesOperario(props) {
         observacion_cosv: "",
         tiempoactividad_cosv: 0,
         tipo_cosv: null,
+        estado_cosv: 23,
         fechaprogramada_cosv: fechaprogramada_cosv,
         fechainicia_cosv: finaltransporte_cosv,
         fechafinal_cosv: fechaactual,
@@ -1062,7 +1072,7 @@ function RegistroActividadesOperario(props) {
   const cumplimiento = [
     {
       title: '# OT',
-      field: 'id_cosv',
+      field: 'id_actividad',
       cellStyle: { minWidth: 50 }
     },
     {
@@ -1360,19 +1370,6 @@ function RegistroActividadesOperario(props) {
         </Row>
 
         <Row justify="center"  >
-          <Col lg={8}>
-            <Item
-              label="Referencia"
-            >
-              <Input
-                name='referencia_cosv'
-                defaultValue={referencia}
-                disabled="true"
-                onChange={(e) => setReferencia(e.target.value)}
-                value={cumplimientoSeleccionado && cumplimientoSeleccionado.referencia_cosv}
-              ></Input>
-            </Item>
-          </Col>
           <Col lg={6}>
             <Item
               label="Falla Mtto"
@@ -1439,6 +1436,7 @@ function RegistroActividadesOperario(props) {
                 name='fechainicia_cosv'
                 type="datetime"
                 value={fechainicial}
+                disabled="true"
                 onChange={(e) => setFechainicial(e.target.value)}
                 InputLabelProps={{ shrink: true }}
                 defaultValue={Moment(cumplimientoSeleccionado.fechainicia_cosv).format('YYYY-MM-DD HH:mm:ss')}
@@ -1457,6 +1455,7 @@ function RegistroActividadesOperario(props) {
                 value={fechafinal}
                 onChange={(e) => setFechafinal(e.target.value)}
                 InputLabelProps={{ shrink: true }}
+                disabled="true"
                 defaultValue={Moment(cumplimientoSeleccionado.fechafinal_cosv).format('YYYY-MM-DD HH:mm:ss')}
                 value={cumplimientoSeleccionado && cumplimientoSeleccionado.fechafinal_cosv}
               >
@@ -1471,6 +1470,7 @@ function RegistroActividadesOperario(props) {
                 style={{ width: 220 }}
                 name="servicio_cosv"
                 defaultValue={servicio}
+                disabled="true"
                 placeholder="Seleccione Servicio Realizado"
                 onChange={handleChanged}
                 //onChange={(e) => setServicioRealizado(e.target.value)}
@@ -1484,54 +1484,6 @@ function RegistroActividadesOperario(props) {
                   })
                 }
               </Select>
-            </Item>
-          </Col>
-        </Row>
-        <Row justify="left">
-          <Col lg={8}>
-            <Item
-              label="Cantidad"
-            >
-              <Input
-                name='cantidad_cosv'
-                value={cantidad}
-                onChange={(e) => setCantidad(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-                value={cumplimientoSeleccionado && cumplimientoSeleccionado.cantidad_cosv}
-              >
-              </Input>
-            </Item>
-          </Col>
-          <Col lg={8}>
-            <Item
-              label="Valor Unitario"
-            >
-              <InputNumber
-                name="valorunitario_cosv"
-                defaultValue={valorunitario}
-                decimalSeparator="."
-                style={{ width: 210 }}
-                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                onChange={(e) => setValorunitario(e.target.value)}
-                value={cumplimientoSeleccionado && cumplimientoSeleccionado.valorunitario_cosv}
-              />
-            </Item>
-          </Col>
-          <Col lg={8}>
-            <Item
-              label="Valor Total"
-            >
-              <InputNumber
-                name="valortotal_cosv"
-                defaultValue={0}
-                decimalSeparator="."
-                style={{ width: 210 }}
-                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                onChange={(e) => setValorunitario(e.target.value)}
-                value={cumplimientoSeleccionado && cumplimientoSeleccionado.valorunitario_cosv}
-              />
             </Item>
           </Col>
         </Row>
@@ -1593,11 +1545,6 @@ function RegistroActividadesOperario(props) {
             icon: 'delete',
             tooltip: 'Eliminar Item',
             onClick: (event, rowData) => seleccionarCumplimiento(rowData, "Eliminar")
-          },
-          {
-            icon: 'edit',
-            tooltip: 'Agregar Observación',
-            onClick: (event, rowData) => grabarObservacion(rowData, "Observacion")
           }
         ]}
         options={{
@@ -1665,11 +1612,7 @@ function RegistroActividadesOperario(props) {
 
   const ActividadEliminar = (
     <div>
-      <p>Estás seguro que deseas eliminar el Cumplimiento de la Orden <b>{cumplimientoSeleccionado && cumplimientoSeleccionado.id}</b>? </p>
-      <div align="right">
-        <Button onClick={() => borraActividadOrden()}> Confirmar </Button>
-        <Button onClick={() => abrirCerrarModalEliminarActividad()}> Cancelar </Button>
-      </div>
+      <p>Estás seguro que deseas eliminar el Cumplimiento de la Orden <b>{id_actividad}</b>? </p>
     </div>
   )
 
@@ -1693,7 +1636,7 @@ function RegistroActividadesOperario(props) {
       </Title>
 
       <Title align="center" level={5}>
-        TIPO DE SERVICIO : {descripcion_tser} &nbsp;&nbsp; TIPO DE ACTIVIDAD : {descripcion_tmt}
+        TIPO DE SERVICIO : {descripcion_tser} &nbsp;&nbsp; TIPO DE ACTIVIDAD : {tipomantenimiento}
       </Title>
     </div>
   )
@@ -1743,7 +1686,7 @@ function RegistroActividadesOperario(props) {
 
       <Modal title="DATOS OT" visible={modalOT} onOk={cerrarModalOT} width={700} closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalOT} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalOT} > Regresar </Button>,
         ]}
       >
         {DatosOT}
@@ -1751,7 +1694,7 @@ function RegistroActividadesOperario(props) {
 
       <Modal title="CUMPLIMIENTO OT" visible={modalEditar} onOk={cerrarModalEditar} width={1200} closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalEditar} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalEditar} > Regresar </Button>,
           <Button type="primary" onClick={grabarCumplimiento} > Enviar </Button>
         ]}
       >
@@ -1764,7 +1707,7 @@ function RegistroActividadesOperario(props) {
         width={1250}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalRevisarCumplimiento} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalRevisarCumplimiento} > Regresar </Button>,
         ]}
       >
         {revisarCumplimiento}
@@ -1776,7 +1719,7 @@ function RegistroActividadesOperario(props) {
         width={1250}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalActualizarCumplimiento} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalActualizarCumplimiento} > Regresar </Button>,
           <Button type="primary" onClick={guardarCambiosCumplimiento} > Enviar </Button>
         ]}
       >
@@ -1789,7 +1732,7 @@ function RegistroActividadesOperario(props) {
         width={600}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalCerrarOrden} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalCerrarOrden} > Regresar </Button>,
           <Button type="primary" onClick={cerrarOrden} > Enviar </Button>
         ]}
       >
@@ -1804,7 +1747,7 @@ function RegistroActividadesOperario(props) {
         width={600}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalFoto} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalFoto} > Regresar </Button>,
         ]}
       >
         <Images numeroactividad={id_actividad} operario={operario} />
@@ -1816,7 +1759,7 @@ function RegistroActividadesOperario(props) {
         width={1000}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalGrabarHorometro} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalGrabarHorometro} > Regresar </Button>,
           <Button type="primary" onClick={grabarValorHorometro} > Enviar </Button>
         ]}
       >
@@ -1829,7 +1772,7 @@ function RegistroActividadesOperario(props) {
         width={1000}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalCrearPendienteOT} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalCrearPendienteOT} > Regresar </Button>,
           <Button type="primary" onClick={crearPendiente} > Enviar </Button>
         ]}
       >
@@ -1842,7 +1785,7 @@ function RegistroActividadesOperario(props) {
         width={1000}
         closable={false}
         footer={[
-          <Botton className="boton" type="primary" danger onClick={cerrarModalNombreCargo} > Cancelar </Botton>,
+          <Botton className="boton" type="primary" danger onClick={cerrarModalNombreCargo} > Regresar </Botton>,
         ]}
       >
         <NombreCargoOT id_actividad={id_actividad}
@@ -1850,6 +1793,19 @@ function RegistroActividadesOperario(props) {
           setModalInsertarNombreCargo={setModalInsertarNombreCargo}
           estado_otr={estado_otr}
         />
+      </Modal>
+
+      <Modal
+        title="ELIMINAR ACTIVIDAD" visible={modalEliminarActividad}
+        onOk={cerrarModalEliminarActividad}
+        width={600}
+        closable={false}
+        footer={[
+          <Botton className="boton" type="s" onClick={cerrarModalEliminarActividad} > Regresar </Botton>,
+          <Botton className="boton" type="primary" danger onClick={borraActividadOrden} > Eliminar </Botton>
+        ]}
+      >
+        {ActividadEliminar}
       </Modal>
     </div>
   );

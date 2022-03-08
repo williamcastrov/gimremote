@@ -49,6 +49,7 @@ class CumplimientoOServController extends Controller
           $insert['cofreseriecomponentes']      = $request['cofreseriecomponentes'];
           $insert['estadocomponentes']          = $request['estadocomponentes'];
           $insert['estadooperacionequipo_cosv'] = $request['estadooperacionequipo_cosv'];
+          $insert['estado_cosv']                = $request['estado_cosv'];
                  
           CumplimientoOServ::insert($insert);
       
@@ -206,12 +207,12 @@ class CumplimientoOServController extends Controller
       public function listaractividadactiva($id_actividad){
         try { 
           $data = DB::select("SELECT t0.*, t1.descripcion_tope, t2.descripcion_are,  t3.descripcion_fmt, t4.descripcion_tfa,
-                                           t5.nombre_est
+                                           t5.nombre_est, t6.descripcion_tmt as tipomantenimiento
           FROM cumplimientooserv as t0 INNER JOIN tipooperacion as t1 INNER JOIN actividadrealizada as t2
                                        INNER JOIN fallasdemtto  as t3 INNER JOIN tiposdefallas      as t4
-                                       INNER JOIN estados       as t5
+                                       INNER JOIN estados       as t5 INNER JOIN tiposmantenimiento as t6
           WHERE t0.id_actividad       = $id_actividad  and t0.tipooperacion_cosv = t1.id_tope and t0.servicio_cosv = t2.id_are  
-            and t0.tipofallamtto_cosv = t3.id_fmt and t3.tipodefalla_fmt    = t4.id_tfa 
+            and t0.tipofallamtto_cosv = t3.id_fmt and t3.tipodefalla_fmt    = t4.id_tfa and t0.tipo_cosv = t6.id_tmt
             and  t0.estadooperacionequipo_cosv = t5.id_est and t0.estado_cosv = 23");
       
           if ($data) {
@@ -441,6 +442,7 @@ class CumplimientoOServController extends Controller
           $data['cofreseriecomponentes']      = $request['cofreseriecomponentes'];
           $data['estadocomponentes']          = $request['estadocomponentes'];
           $data['estadooperacionequipo_cosv'] = $request['estadooperacionequipo_cosv'];
+          $data['estado_cosv']                = $request['estado_cosv'];
       
           $res = CumplimientoOServ::where("id_actividad",$id_actividad)->update($data);
     
@@ -507,7 +509,7 @@ class CumplimientoOServController extends Controller
     
       public function delete($id){ 
         try {
-          $res = CumplimientoOServ::where("id",$id)->delete($id);
+          $res = CumplimientoOServ::where("id_actividad",$id)->delete($id);
           $response['res'] = $res;
     
           $response['message'] = "Deleted successful";

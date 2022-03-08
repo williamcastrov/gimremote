@@ -307,6 +307,11 @@ function CumplirOrdenTecnico(props) {
             field: 'nombre_ciu',
             title: 'Ciudad',
             cellStyle: { minWidth: 50 }
+        },
+        {
+            field: 'comentarios_cosv',
+            title: 'Comentarios',
+            cellStyle: { minWidth: 100 }
         }
     ]
 
@@ -320,7 +325,7 @@ function CumplirOrdenTecnico(props) {
                 totalActivas > 0 ?
                     (
                         <ActividadesOservOperario ordenSeleccionado={ordenSeleccionado} tipoRegistro={tipoRegistro}
-                            listActividadActiva={listActividadActiva}
+                            listActividadActiva={listActividadActiva} idUsu={idUsu}
                         />
                     )
                     :
@@ -395,7 +400,7 @@ function CumplirOrdenTecnico(props) {
             />
             <Modal title="REGISTRAR ACTIVIDADES OT" visible={modalEditar} onOk={cerrarModalEditar} width={500} closable={false}
                 footer={[
-                    <Button type="primary" danger onClick={cerrarModalEditar} > Cancelar </Button>,
+                    <Button type="primary" danger onClick={cerrarModalEditar} > Regresar </Button>,
                 ]}
             >
                 {ordenEditar}

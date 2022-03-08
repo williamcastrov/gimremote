@@ -443,7 +443,7 @@ function NombreCargoOT(props) {
         width={800}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalFirmarOT} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalFirmarOT} > Regresar </Button>,
         ]}
       >
         <FirmarOT id_actividad={id_actividad} />
@@ -455,7 +455,7 @@ function NombreCargoOT(props) {
         high={400}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalCalificarServicio} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalCalificarServicio} > Regresar </Button>,
         ]}
       >
         {calificarServicioOT}

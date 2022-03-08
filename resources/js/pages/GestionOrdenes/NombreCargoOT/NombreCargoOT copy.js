@@ -279,7 +279,7 @@ function NombreCargoOT(props) {
         width={600}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalInsertarNombreCargo} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalInsertarNombreCargo} > Regresar </Button>,
           <Button type="primary" onClick={grabaNombreCargo} > Enviar </Button>
         ]}
       >
@@ -292,7 +292,7 @@ function NombreCargoOT(props) {
         width={600}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalEditarNombreCargo} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalEditarNombreCargo} > Regresar </Button>,
           <Button type="primary"  > Enviar </Button>
         ]}
       >

@@ -289,7 +289,7 @@ function TiposAlmacenes() {
       </FormControl>
       <div align="right">
         <Button color="primary" onClick={() => grabarTipoAlmacen()} >Insertar</Button>
-        <Button onClick={() => abrirCerrarModalInsertar()} >Cancelar</Button>
+        <Button onClick={() => abrirCerrarModalInsertar()} >Regresar</Button>
       </div>
     </div>
   )
@@ -340,7 +340,7 @@ function TiposAlmacenes() {
       <br />
       <div align="right">
         <Button color="primary" onClick={() => actualizarTipoAlmacen()} >Editar</Button>
-        <Button onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>
+        <Button onClick={() => abrirCerrarModalEditar()}>Regresar</Button>
       </div>
     </div>
   )
@@ -350,7 +350,7 @@ function TiposAlmacenes() {
       <p>Estás seguro que deseas eliminar el Tipo de Almacen <b>{tiposAlmacenesSeleccionado && tiposAlmacenesSeleccionado.nombre_talm}</b>? </p>
       <div align="right">
         <Button color="secondary" onClick={() => borrarTipoAlmacen()}> Confirmar </Button>
-        <Button onClick={() => abrirCerrarModalEliminar()}> Cancelar </Button>
+        <Button onClick={() => abrirCerrarModalEliminar()}> Regresar </Button>
       </div>
     </div>
   )

@@ -877,7 +877,7 @@ function InventarioEquipo(props) {
         componenteInventarioSeleccionado.elemento_inve}</b>? </p>
       <div align="right">
         <Button onClick={() => borrarInventarioEquipo()}> Confirmar </Button>
-        <Button onClick={() => cerrarModalEliminarInventarioEquipo()}> Cancelar </Button>
+        <Button onClick={() => cerrarModalEliminarInventarioEquipo()}> Regresar </Button>
       </div>
     </div>
   )
@@ -995,7 +995,7 @@ function InventarioEquipo(props) {
         closable={false}
         footer={[
           <Button type="primary" onClick={grabaInventarioEquipo} > Enviar </Button>,
-          <Button type="primary" danger onClick={cerrarModalInsertarInventarioEquipo} > Cancelar </Button>
+          <Button type="primary" danger onClick={cerrarModalInsertarInventarioEquipo} > Regresar </Button>
         ]}
       >
         {inventarioEquipoInsertar}
@@ -1007,7 +1007,7 @@ function InventarioEquipo(props) {
         width={1000}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalEditarInventarioEquipo} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalEditarInventarioEquipo} > Regresar </Button>,
         ]}
       >
         {codigoEquipoConsultar}
@@ -1019,7 +1019,7 @@ function InventarioEquipo(props) {
         width={600}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalEliminarInventarioEquipo} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalEliminarInventarioEquipo} > Regresar </Button>,
         ]}
       >
         {inventarioEquipoEliminar}
@@ -1031,7 +1031,7 @@ function InventarioEquipo(props) {
         width={600}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalEquipos} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalEquipos} > Regresar </Button>,
           <Button type="primary"  > Enviar </Button>
         ]}
       >
@@ -1044,7 +1044,7 @@ function InventarioEquipo(props) {
         width={1600}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalConsultarInventarioEquipo} > Cancelar </Button>
+          <Button type="primary" danger onClick={cerrarModalConsultarInventarioEquipo} > Regresar </Button>
         ]}
       >
         {consultarInventarioEquipo}
@@ -1056,7 +1056,7 @@ function InventarioEquipo(props) {
         width={1600}
         closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalModificarInventarioEquipo} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalModificarInventarioEquipo} > Regresar </Button>,
           <Button type="primary" onClick={actualizarInventarioEquipo} > Enviar </Button>
         ]}
       >

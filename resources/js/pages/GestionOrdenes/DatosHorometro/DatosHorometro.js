@@ -275,7 +275,7 @@ function DatosHorometro() {
       <br />
       <div align="right">    
         <Button color="primary" onClick = { () => grabarHorometro() } >Insertar</Button>
-        <Button onClick={()=> abrirCerrarModalInsertar()} >Cancelar</Button>
+        <Button onClick={()=> abrirCerrarModalInsertar()} >Regresar</Button>
       </div>
     </div>
   )
@@ -291,7 +291,7 @@ function DatosHorometro() {
       <br /><br />
       <div align="right">
         <Button color="primary"  onClick={()=>actualizarPais()} >Editar</Button>
-        <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
+        <Button onClick={()=>abrirCerrarModalEditar()}>Regresar</Button>
       </div>
     </div>
   )
@@ -301,7 +301,7 @@ function DatosHorometro() {
       <p>Estás seguro que deseas eliminar el País <b>{datoshorometroSeleccionado && datoshorometroSeleccionado.nombre_pai}</b>? </p>
       <div align="right">
         <Button color="secondary" onClick = {() => borrarPais() }> Confirmar </Button>
-        <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>
+        <Button onClick={()=>abrirCerrarModalEliminar()}> Regresar </Button>
 
       </div>
 

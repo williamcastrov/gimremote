@@ -1881,7 +1881,7 @@ function RegistroActividadesOperario(props) {
 
       <Modal title="DATOS OT" visible={modalOT} onOk={cerrarModalOT} width={700} closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalOT} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalOT} > Regresar </Button>,
         ]}
       >
         {DatosOT}
@@ -1889,7 +1889,7 @@ function RegistroActividadesOperario(props) {
 
       <Modal title="CUMPLIMIENTO OT" visible={modalEditar} onOk={cerrarModalEditar} width={1200} closable={false}
         footer={[
-          <Button type="primary" danger onClick={cerrarModalEditar} > Cancelar </Button>,
+          <Button type="primary" danger onClick={cerrarModalEditar} > Regresar </Button>,
           <Button type="primary" onClick={grabarCumplimiento} > Enviar </Button>
         ]}
       >

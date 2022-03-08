@@ -166,7 +166,7 @@ function ConsultarFotosEquipos(props) {
       <p>Estás seguro que deseas eliminar la Foto del Equipo <b>{fotoEquipoSeleccionado && fotoEquipoSeleccionado.name}</b>? </p>
       <div align="right">
         <Button color="secondary" onClick={() => borrarFotoEquipo()}> Confirmar </Button>
-        <Button onClick={() => abrirCerrarModalEliminar()}> Cancelar </Button>
+        <Button onClick={() => abrirCerrarModalEliminar()}> Regresar </Button>
 
       </div>
 
