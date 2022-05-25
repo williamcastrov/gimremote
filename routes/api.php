@@ -180,6 +180,8 @@ Route::post('/firmarot/create', 'App\Http\Controllers\API\GestionOrdenes\FirmarO
 Route::delete('/firmarot/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\FirmarOTController@delete');
 Route::put('/firmarot/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\FirmarOTController@update');
 
+Route::get('/placasvehiculos/listar_placasvehiculos', 'App\Http\Controllers\API\GestionOrdenes\PlacasVehiculosController@listar_placasvehiculos');
+
 Route::get('/calificacionservicio/listar_calificacionservcioot', 'App\Http\Controllers\API\GestionOrdenes\CalificacionServicioOTController@listar_calificacionservcioot');
 Route::post('/calificacionservicio/create', 'App\Http\Controllers\API\GestionOrdenes\CalificacionServicioOTController@create');
 Route::get('/calificacionservicio/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\CalificacionServicioOTController@get');

@@ -16,12 +16,6 @@ import { ListGroup } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button as Botton } from "react-bootstrap";
 
-import MoodBadSharpIcon from '@material-ui/icons/MoodBadSharp';
-import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
-import SentimentDissatisfiedIcon from '@material-ui/icons/SentimentDissatisfied';
-import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
-import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
-
 // Floating Button
 import { Container, Button as Bottom, Link, lightColors, darkColors } from 'react-floating-action-button';
 
@@ -42,6 +36,8 @@ import estadosServices from "../../../services/Parameters/Estados";
 import pendienteotServices from "../../../services/GestionOrdenes/PendienteOT";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
 import firmarotServices from "../../../services/GestionOrdenes/FirmarOT";
+import placasVehiculosServices from "../../../services/GestionOrdenes/PlacasVehiculos";
+import calificacionServices from "../../../services/GestionOrdenes/CalificacionServicioOT";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -119,7 +115,7 @@ function RegistroActividadesOperario(props) {
     operario_cosv, operariodos_cosv, servicio_cosv, tipo_cosv, tipofallamtto_cosv, tipooperacion_cosv, horometro_cosv,
     cantidad_cosv, valorunitario_cosv, tipomantenimiento
   } = props.listActividadActiva;
-  
+
   console.log("ID USUARIO : ", props.idUsu);
 
   const styles = useStyles();
@@ -132,7 +128,7 @@ function RegistroActividadesOperario(props) {
   console.log("FECHA INICIA : ", finaltransporte_otr)
   console.log("TIEMPO DE TRANSPORTE : ", tiempotransporte_otr)
 */
-  const [listUnaOrden, setListUnaOrden] = useState([]);
+  const [listarPlacasVehiculos, setListarPlacasVehiculos] = useState([]);
   const [listUnCumplimiento, setListUnCumplimiento] = useState([]);
   const [listActividadActiva, setListActividadActiva] = useState([]);
   const [leeCombos, setLeeCombos] = useState([]);
@@ -186,6 +182,7 @@ function RegistroActividadesOperario(props) {
   const [horometroActual, setHorometroActual] = useState(0);
   const [horometro, setHorometro] = useState(horometro_otr);
   const [observacionPendienteOT, setObservacionPendienteOT] = useState("");
+  const [placaVehiculo, setPlacaVehiculo] = useState(8);
   const [tiempoTransporte, setTiempoTransporte] = useState(tiempotransporte_otr);
   const [fechaIniciaTransporte, setFechaIniciaTransporte] = useState(iniciatransporte_cosv);
   const [fechaFinalTransporte, setFechaFinalTransporte] = useState(finaltransporte_cosv);
@@ -228,6 +225,8 @@ function RegistroActividadesOperario(props) {
     cofreseriecomponentes: 0,
     estadocomponentes: 0,
     estadooperacionequipo_cosv: 81,
+    comentarios_cosv: "",
+    placavehiculo_cosv: 8
   });
 
   const [horometroSeleccionado, setHorometroSeleccionado] = useState({
@@ -320,6 +319,15 @@ function RegistroActividadesOperario(props) {
   }, [])
 
   useEffect(() => {
+    async function fetchPlacasVehiculos() {
+      const res = await placasVehiculosServices.listar_placasvehiculos();
+      setListarPlacasVehiculos(res.data);
+      //console.log("ESATDOS : ", res.data)
+    }
+    fetchPlacasVehiculos();
+  }, [])
+
+  useEffect(() => {
     async function fetchDataCombos() {
       let codigo = '"' + codigo_equ + '"'
       //console.log("CODIGO : " , codigo);
@@ -333,13 +341,6 @@ function RegistroActividadesOperario(props) {
 
 
   useEffect(() => {
-    /*
-    async function fetchDataOrdenes() {
-      const res = await crearordenesServices.listUnaOrden(id_otr);
-      setListUnaOrden(res.data);
-    }
-    fetchDataOrdenes();
-*/
     async function fetchDataCumplimientoActivo() {
       const res = await cumplimientooservServices.listActividadActiva(id_otr);
       setListActividadActiva(res.data[0]);
@@ -460,16 +461,36 @@ function RegistroActividadesOperario(props) {
 
     //console.log("VALOR ACTUALIZADO ORDEN", props.listActividadActiva);
 
+    const result = await calificacionServices.listunacalificacionservicio(id_actividad);
+    //console.log("DATOS CALIFICACION", result.data);
+   
+    if (!result.data && (props.idUsu != 1 && props.idUsu != 2 && props.idUsu != 3 && props.idUsu != 4 && props.idUsu != 26)){
+      swal("Control Calificación OT", "La actividad no registra Calificación", "warning", { button: "Aceptar" });
+      return
+    }else
+    if (props.idUsu != 1 || props.idUsu != 2 || props.idUsu != 3 || props.idUsu != 4 || props.idUsu != 26) {
+      console.log("PERMISO USUARIOS TERMINAN ORDEN SIN CALIFICACION");
+    } else
+    if (!result.data){
+      swal("Control Calificación OT", "La actividad no registra Calificación", "warning", { button: "Aceptar" });
+      return
+    }else
+      if (result.data.length === 0) {
+        console.log("Información Calificación : ", res.data);
+        swal("Control Calificación OT", "La actividad no registra Calificación", "warning", { button: "Aceptar" });
+        return
+      }
+
     const res = await firmarotServices.listfirmasot(id_actividad);
 
-    if(props.idUsu != 1 || props.idUsu != 2 || props.idUsu != 3 || props.idUsu != 4 || props.idUsu != 26){
+    if (props.idUsu != 1 || props.idUsu != 2 || props.idUsu != 3 || props.idUsu != 4 || props.idUsu != 26) {
       console.log("PERMISO USUARIOS TERMINAN ORDEN SIN FIRMA");
-    }else
-    if (res.data.length === 0) {
-      console.log("Información Firmas : ", res.data);
-      swal("Control Firma OT", "La actividad no registra firma", "warning", { button: "Aceptar" });
-      return
-    }
+    } else
+      if (res.data.length === 0) {
+        console.log("Información Firmas : ", res.data);
+        swal("Control Firma OT", "La actividad no registra firma", "warning", { button: "Aceptar" });
+        return
+      }
 
     if (res.success) {
       swal("Firma OT Cliente", "Grabada de Forma Correcta!", "success", { button: "Aceptar" });
@@ -662,10 +683,10 @@ function RegistroActividadesOperario(props) {
 
         // Web service actualiza datos Horometro en la Actividad
         const result = await cumplimientooservServices.updatehorometro(horometroActividad[0]);
-       
+
         if (result.success) {
           swal("Control Horometro Actividad", "Control del Horometro Actvidad Actualizado!", "success", { button: "Aceptar" });
-          
+
           const rest = await datoshorometroServices.update(horometroSeleccionado[0]);
 
           if (rest.success) {
@@ -791,7 +812,9 @@ function RegistroActividadesOperario(props) {
         celdasreferenciacomponente: "0",
         cofreseriecomponentes: "0",
         estadocomponentes: "0",
-        estadooperacionequipo_cosv: estadoOperacionEquipos
+        estadooperacionequipo_cosv: estadoOperacionEquipos,
+        comentarios_cosv: "",
+        placavehiculo_cosv: placaVehiculo
       }]);
     }
     setGrabar(true);
@@ -854,7 +877,10 @@ function RegistroActividadesOperario(props) {
         servicio_cosv: cumplimientoSeleccionado.servicio_cosv,
         observacion_cosv: cumplimientoSeleccionado.observacion_cosv,
         tiempoactividad_cosv: tiempo,
-        estadooperacionequipo_cosv: cumplimientoSeleccionado.estadooperacionequipo_cosv
+        estadooperacionequipo_cosv: cumplimientoSeleccionado.estadooperacionequipo_cosv,
+        comentarios_cosv: cumplimientoSeleccionado.comentarios_cosv,
+        placavehiculo_cosv: cumplimientoSeleccionado.placavehiculo_cosv
+
       }]);
     }
     setGrabarCambios(true);
@@ -924,6 +950,11 @@ function RegistroActividadesOperario(props) {
 
   function handleChanged(value) {
     console.log(`selected ${value}`);
+  }
+
+  function handleChangedPlaca(value) {
+    console.log("CODIGO PLACA", value);
+    setPlacaVehiculo(value);
   }
 
   function seleccionarFallaMtto(value) {
@@ -1001,8 +1032,18 @@ function RegistroActividadesOperario(props) {
   }
 
   const agregarCumplimientoOperacion = () => {
-    //console.log("DATOS ACTIVIDAD ID: ", id)
+    console.log("FECHA INICIA ACTIVIDAD: ", finaltransporte_cosv)
     // the item selected
+    if (!iniciatransporte_cosv) {
+      swal("OT", "La OT no tiene Inicio de Transporte, Lo Debe Ingresar y Salir del Sistema!", "warning", { button: "Aceptar" });
+      return
+    }
+
+    if (!finaltransporte_cosv) {
+      swal("OT", "La OT no tiene Inicio de Actividades, Lo Debe Ingresar y Salir del Sistema!", "warning", { button: "Aceptar" });
+      return
+    }
+
     if (iniciatransporte_cosv === "2001-01-01 00:00:00") {
       swal("OT", "La OT no tiene Inicio de Transporte, Lo Debe Ingresar y Salir del Sistema!", "warning", { button: "Aceptar" });
       return
@@ -1062,9 +1103,10 @@ function RegistroActividadesOperario(props) {
         celdasreferenciacomponente: "0",
         cofreseriecomponentes: "0",
         estadocomponentes: "0",
-        estadooperacionequipo_cosv: cumplimientoSeleccionado.estadooperacionequipo_cosv
+        estadooperacionequipo_cosv: cumplimientoSeleccionado.estadooperacionequipo_cosv,
+        comentarios_cosv: cumplimientoSeleccionado.comentarios_cosv,
+        placavehiculo_cosv: cumplimientoSeleccionado.placavehiculo_cosv
       }]);
-
     }
     abrirModalEditar();
   };
@@ -1179,7 +1221,7 @@ function RegistroActividadesOperario(props) {
               <Select
                 style={{ width: 220 }}
                 name="combogrupo_cosv"
-                placeholder="Seleccione el compooente del Mtto"
+                placeholder="Seleccione el componente del Mtto"
                 onChange={seleccionarCodigoCombo}
               >
                 {
@@ -1256,6 +1298,28 @@ function RegistroActividadesOperario(props) {
           </Col>
         </Row>
         <Row justify="center"  >
+          <Col lg={8}>
+            <Item
+              label="Placa Vehículo"
+            >
+              <Select
+                style={{ width: 220 }}
+                name="placavehiculo_cosv"
+                placeholder="Seleccione placa del Vehículo"
+                onChange={handleChangedPlaca}
+              >
+                {
+                  listarPlacasVehiculos && listarPlacasVehiculos.map((itemselect) => {
+                    return (
+                      <Option value={itemselect.id}>{itemselect.tipovehiculo}{"-"}{itemselect.placa}</Option>
+                    )
+                  })
+                }
+              </Select>
+            </Item>
+          </Col>
+        </Row>
+        <Row justify="center"  >
         </Row>
         <Row justify="lef">
           <Col lg={14}>
@@ -1278,7 +1342,7 @@ function RegistroActividadesOperario(props) {
             >
               <Input
                 name="observacion_cosv"
-                value={observacion}
+                //value={observacion}
                 onChange={(e) => setObservacion(e.target.value)}
                 value={cumplimientoSeleccionado && cumplimientoSeleccionado.observacion_cosv}
               ></Input>
@@ -1435,7 +1499,7 @@ function RegistroActividadesOperario(props) {
               <Input
                 name='fechainicia_cosv'
                 type="datetime"
-                value={fechainicial}
+                //value={fechainicial}
                 disabled="true"
                 onChange={(e) => setFechainicial(e.target.value)}
                 InputLabelProps={{ shrink: true }}
@@ -1452,7 +1516,7 @@ function RegistroActividadesOperario(props) {
               <Input
                 name='fechafinal_cosv'
                 type="datetime"
-                value={fechafinal}
+                //value={fechafinal}
                 onChange={(e) => setFechafinal(e.target.value)}
                 InputLabelProps={{ shrink: true }}
                 disabled="true"
@@ -1494,7 +1558,7 @@ function RegistroActividadesOperario(props) {
             >
               <Input
                 name="observacion_cosv"
-                value={observacion}
+                //value={observacion}
                 onClick={(e) => setObservacion(e.target.value)}
                 value={cumplimientoSeleccionado && cumplimientoSeleccionado.observacion_cosv}
               ></Input>

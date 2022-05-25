@@ -50,6 +50,8 @@ class CumplimientoOServController extends Controller
           $insert['estadocomponentes']          = $request['estadocomponentes'];
           $insert['estadooperacionequipo_cosv'] = $request['estadooperacionequipo_cosv'];
           $insert['estado_cosv']                = $request['estado_cosv'];
+          $insert['comentarios_cosv']           = $request['comentarios_cosv'];
+          $insert['placavehiculo_cosv']         = $request['placavehiculo_cosv'];
                  
           CumplimientoOServ::insert($insert);
       
@@ -443,6 +445,8 @@ class CumplimientoOServController extends Controller
           $data['estadocomponentes']          = $request['estadocomponentes'];
           $data['estadooperacionequipo_cosv'] = $request['estadooperacionequipo_cosv'];
           $data['estado_cosv']                = $request['estado_cosv'];
+          $data['comentarios_cosv']           = $request['comentarios_cosv'];
+          $data['placavehiculo_cosv']         = $request['placavehiculo_cosv'];
       
           $res = CumplimientoOServ::where("id_actividad",$id_actividad)->update($data);
     
